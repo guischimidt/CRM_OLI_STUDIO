@@ -1,0 +1,17 @@
+*{
+  padding: 0;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+h1{
+  color: #b4296a;
+  margin-bottom: 1em;
+  font-size: 2.1em;
+}
+
+.bold{
+  font-weight: bold;
+  color: #b4296a;
+}

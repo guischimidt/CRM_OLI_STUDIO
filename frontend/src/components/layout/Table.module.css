@@ -1,0 +1,39 @@
+table {
+    border: 1px solid #d43f85;
+    background-color: #FFFFFF;
+    max-width: 90%;
+    border-collapse: collapse;
+    margin: 0 auto;
+  }
+
+  @media only screen and (max-width: 600px) {
+    table {
+      font-size: .9em;
+    }
+  }
+
+  table td, table th {
+    border: 1px solid #d43f85;
+    padding: .5em;
+  }
+  table tr:nth-child(even) {
+    background: #FFEEF7;
+  }
+
+  table th {
+    font-weight: bold;
+    background: #B4296A;
+    color: #FFF8DB;
+  }
+
+  table svg {
+    color: #B4296A;
+  }
+
+  table p{
+    text-align: center;
+  }
+
+  .bold {
+    font-weight: bold;
+  }

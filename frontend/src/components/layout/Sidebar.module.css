@@ -1,0 +1,118 @@
+@font-face {
+    font-family: Sweet-Pea;
+    src: url(../../assets/fonts/Sweet\ Pea.ttf)
+}
+
+.nav {
+    background: #b4296a;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav_icon {
+    margin-left: 2rem;
+    font-size: 2rem;
+    height: 60px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.nav_icon img {
+    width: 40px;
+    margin-right: 0.8em;
+}
+
+.nav_icon h2 {
+    font-size: 1em;
+    margin-right: 1em;
+    color: #fff8db;
+    font-family: Sweet-Pea;
+    margin-top: 0.25em;
+}
+
+svg {
+    color: #fff8db;
+    cursor: pointer;
+}
+
+.sidebar_nav {
+    background: #b4296a;
+    width: 250px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: .5s;
+    z-index: 10;
+}
+
+.sidebar_wrap {
+    width: 100%;
+}
+
+.sidebar_link {
+    display: flex;
+    color: #fff8db;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    list-style: none;
+    height: 4 0px;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.sidebar_link:hover {
+    background: #811246;
+    border-left: 4px solid #fff8db;
+    cursor: pointer;
+}
+
+.dropdown_link {
+    background: #d43f85;
+    height: 60px;
+    padding-left: 3rem;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff8db;
+    font-size: 18px;
+}
+
+.dropdown_link:hover {
+    background: #811246;
+    cursor: pointer;
+}
+
+.hidden {
+    background: #b4296a;
+    width: 250px;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    transition: .5s;
+    z-index: 10;
+}
+
+span {
+    margin-left: 16px;
+}
+
+.open {
+    background-color: transparent;
+    width: 100%;
+    height: 1000px;
+    position: absolute;
+}
+
+.close {
+    display: none;
+}
