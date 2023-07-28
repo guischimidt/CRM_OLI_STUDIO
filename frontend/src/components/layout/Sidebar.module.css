@@ -27,7 +27,7 @@
 
 .nav_icon h2 {
     font-size: 1em;
-    margin-right: 1em;
+    /* margin-right: 1em; */
     color: #fff8db;
     font-family: Sweet-Pea;
     margin-top: 0.25em;
@@ -104,6 +104,15 @@ svg {
 
 span {
     margin-left: 16px;
+}
+
+.nav li {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff8db;
+    list-style-type: none;
+    margin-right: 0.8em;
+    cursor: pointer;
 }
 
 .open {

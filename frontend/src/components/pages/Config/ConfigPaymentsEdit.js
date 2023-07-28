@@ -12,25 +12,35 @@ function ConfigPaymentsEdit() {
     const { id } = useParams();
     const { setFlashMessage } = useFlashMessage();
     const navigate = useNavigate();
+    const [token] = useState(localStorage.getItem('token') || '');
+
 
     useEffect(() => {
-        api.get(`/config/payments/${id}`, )
+        api.get(`/config/payments/${id}`, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 setPayment(response.data.payment)
             })
-    }, [id])
+    }, [id, token])
 
     async function updatePayment(payment) {
         let msgType = "success";
 
-        const data = await api.patch(`config/payments/${payment._id}`, payment, )
-        .then((response) => {
-            return response.data;
+        const data = await api.patch(`config/payments/${payment._id}`, payment, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
         })
-        .catch((err) => {
-            msgType = 'error';
-            return err.response.data;
-        });
+            .then((response) => {
+                return response.data;
+            })
+            .catch((err) => {
+                msgType = 'error';
+                return err.response.data;
+            });
 
         setFlashMessage(data.message, msgType);
         navigate('/config/payments');

@@ -38,6 +38,8 @@ function Schedules() {
     const [modalPayment, setModalPayment] = useState(false);
     const [customer, setCustomer] = useState({});
 
+    const [token] = useState(localStorage.getItem('token') || '');
+
     const customStyles = {
         content: {
             top: '50%',
@@ -66,7 +68,7 @@ function Schedules() {
 
     useEffect(() => {
         setSchedule({ year: JSON.stringify(actualYear) });
-    }, []);
+    }, [actualYear]);
 
     function handleSelect(e) {
         setSchedule({ ...schedule, [e.target.name]: e.target.options[e.target.selectedIndex].value });
@@ -127,15 +129,19 @@ function Schedules() {
             if (payment.paid2 !== 0)
                 setPayment({ ...payment, paid2: 0, name2: "" });
         }
-    }, [payment]);
+    }, [payment, price]);
 
     //Atualizar algum dado do agendamento
     async function update(e) {
         e.preventDefault();
         let msgType = "";
-        let updateCustomer = "";
+        // let updateCustomer = "";
 
-        const data = await api.patch(`schedules/${scheduleId}`, { schedule, payment })
+        const data = await api.patch(`schedules/${scheduleId}`, { schedule, payment }, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 msgType = "success";
                 return response.data;
@@ -146,12 +152,16 @@ function Schedules() {
             });
 
         if (payment && customer._id !== "" && msgType === "success") {
-            updateCustomer = await api.patch(`customers/edit/${customer._id}`, customer,)
+            await api.patch(`customers/edit/${customer._id}`, customer, {
+                headers: {
+                    Authorization: `Bearer ${JSON.parse(token)}`,
+                }
+            })
                 .then((response) => {
-                    return response.updateCustomer;
+                    return response;
                 })
                 .catch((err) => {
-                    return err.response.updateCustomer;
+                    return err.response;
                 });
 
         }
@@ -159,8 +169,11 @@ function Schedules() {
         setFlashMessage(data.message, msgType);
         setStatus("Atualizado");
         setSchedule("");
-        navigate('/schedule');
+        setPayment({});
+        setScheduleId("");
         closeModal();
+        navigate('/schedule');
+
     };
 
     //Cancelar agendamento
@@ -168,7 +181,11 @@ function Schedules() {
         let msgType = "success";
 
 
-        const data = await api.patch(`schedules/${id}`, cancelStatus,)
+        const data = await api.patch(`schedules/${id}`, cancelStatus, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 return response.data;
             })
@@ -184,7 +201,12 @@ function Schedules() {
 
     //Filtrar por status ou nome
     useEffect(() => {
-        api.get(`/schedules/${filter.name}`)
+        api.get(`/schedules/${filter.name}`,
+        {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 setSchedules(response.data.schedules);
 
@@ -233,14 +255,19 @@ function Schedules() {
 
 
             });
-    }, [status, filter]);
+              // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [status, filter, token]);
 
     useEffect(() => {
-        api.get('config/payments')
+        api.get('config/payments', {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 setPayments(response.data.payments);
             })
-    }, [])
+    }, [token])
 
     return (
         <section>

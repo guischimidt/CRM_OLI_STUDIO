@@ -12,18 +12,28 @@ function CustomerEdit() {
     const { id } = useParams();
     const { setFlashMessage } = useFlashMessage();
     const navigate = useNavigate();
+    const [token] = useState(localStorage.getItem('token') || '');
+
 
     useEffect(() => {
-        api.get(`/customers/${id}`, )
+        api.get(`/customers/${id}`, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 setCustomer(response.data.customer)
             })
-    }, [id])
+    }, [id, token])
 
     async function updateCustomer(customer) {
         let msgType = "success";
 
-        const data = await api.patch(`customers/edit/${customer._id}`, customer, )
+        const data = await api.patch(`customers/edit/${customer._id}`, customer, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        } )
         .then((response) => {
             return response.data;
         })

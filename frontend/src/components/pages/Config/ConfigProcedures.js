@@ -17,19 +17,28 @@ function ConfigProcedures() {
     const navigate = useNavigate();
     const [procedures, setProcedures] = useState([]);
     const { setFlashMessage } = useFlashMessage();
+    const [token] = useState(localStorage.getItem('token') || '');
 
     useEffect(() => {
 
-        api.get('/config/procedures/')
+        api.get('/config/procedures/', {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 setProcedures(response.data.procedures);
             });
-    }, []);
+    }, [token]);
 
     async function removeProcedure(id) {
         let msgType = 'success';
 
-        const data = await api.delete(`/config/procedures/${id}`,)
+        const data = await api.delete(`/config/procedures/${id}`, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 const updatedProcedures = procedures.filter((procedure) => procedure._id !== id);
                 setProcedures(updatedProcedures);

@@ -32,3 +32,8 @@
     color: #16479d;
     font-weight: bold;
 }
+
+h1{
+    text-align: center;
+    margin-bottom: .5em;
+}

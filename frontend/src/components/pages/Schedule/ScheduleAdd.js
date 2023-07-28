@@ -3,6 +3,7 @@ import api from '../../../utils/api'
 import styles from './ScheduleAdd.module.css';
 
 import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
 
 //Components 
 import ScheduleForm from '../../form/ScheduleForm';
@@ -15,12 +16,18 @@ function ScheduleAdd() {
     const { id } = useParams();
     const { setFlashMessage } = useFlashMessage();
     const navigate = useNavigate();
+    const [token] = useState(localStorage.getItem('token') || '');
+
     
     async function addSchedule([customer, selected, schedule]) {
         let msgType = "success";
        // console.log(selected);
 
-        const data = await api.post('schedules/create', [customer, selected, schedule])
+        const data = await api.post('schedules/create', [customer, selected, schedule], {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 return response.data;
             })

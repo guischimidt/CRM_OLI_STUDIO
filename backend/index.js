@@ -5,7 +5,7 @@ const cron = require('node-cron');
 var axios = require('axios');
 
 //Import Routes
-//const ScheduleRoutes = require('./routes/ScheduleRoutes');
+const UserRoutes = require('./routes/UserRoutes');
 const CustomerRoutes = require('./routes/CustomerRoutes');
 const ConfigRoutes = require('./routes/ConfigRoutes');
 const ScheduleRoutes = require('./routes/ScheduleRoutes');
@@ -16,16 +16,14 @@ const app = express();
 app.use(express.json());
 
 //solve cors
-app.use(cors({credentials: true, origin: 'http://192.168.0.10:3000'}));
+app.use(cors({ credentials: true, origin: 'http://192.168.0.10:3000' }));
 
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept"
-    );
-    next();
-  });
+  res.set('access-control-allow-origin', '*')
+  res.set('access-control-allow-methods', '*')
+  res.set('access-control-allow-headers', '*')
+  next();
+});
 
 //public folder for images
 app.use(express.static('public'));
@@ -34,6 +32,7 @@ app.use(express.static('public'));
 app.use('/customers', CustomerRoutes);
 app.use('/config', ConfigRoutes);
 app.use('/schedules', ScheduleRoutes);
+app.use('/users', UserRoutes);
 
 //Cron
 cron.schedule("0 19 * * *", () => {
@@ -42,14 +41,14 @@ cron.schedule("0 19 * * *", () => {
     method: 'post',
     url: 'http://192.168.0.10:5000/schedules/sendMessage/',
     headers: {},
-};
+  };
 
- axios(config)
+  axios(config)
     .then(function (response) {
-        console.log(response);
+      console.log(response);
     })
     .catch(function (error) {
-        console.log(error);
+      console.log(error);
     });
 });
 

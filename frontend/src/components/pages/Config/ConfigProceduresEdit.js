@@ -12,18 +12,28 @@ function ConfigProceduresEdit() {
     const { id } = useParams();
     const { setFlashMessage } = useFlashMessage();
     const navigate = useNavigate();
+    const [token] = useState(localStorage.getItem('token') || '');
+
 
     useEffect(() => {
-        api.get(`/config/procedures/${id}`, )
+        api.get(`/config/procedures/${id}`, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        } )
             .then((response) => {
                 setProcedure(response.data.procedure)
             })
-    }, [id])
+    }, [id, token])
 
     async function updateProcedure(procedure) {
         let msgType = "success";
 
-        const data = await api.patch(`config/procedures/${procedure._id}`, procedure, )
+        const data = await api.patch(`config/procedures/${procedure._id}`, procedure, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
         .then((response) => {
             return response.data;
         })

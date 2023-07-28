@@ -3,6 +3,7 @@ import api from '../../../utils/api'
 import styles from './ConfigProceduresAdd.module.css';
 
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 //Components 
 import ProcedureForm from '../../form/ProcedureForm';
@@ -13,11 +14,17 @@ import useFlashMessage from '../../../hooks/useFlashMessage';
 function ConfigProceduresAdd() {
     const { setFlashMessage } = useFlashMessage();
     const navigate = useNavigate();
+    const [token] = useState(localStorage.getItem('token') || '');
+
 
     async function registerProcedure(procedure) {
         let msgType = "success";
 
-        const data = await api.post('config/procedures/create', procedure,)
+        const data = await api.post('config/procedures/create', procedure, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 return response.data;
             })

@@ -22,24 +22,35 @@ function Customers() {
 
     const [name, setName] = useState("");
 
+    const [token] = useState(localStorage.getItem('token') || '');
+
+
     function handleChange(e) {
         setName(e.target.value);
     };
 
     useEffect(() => {
 
-        api.get('/customers')
+        api.get('/customers', {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 setCustomers(response.data.customers);
             });
 
-    }, []);
+    }, [token]);
 
     function filter(e) {
         e.preventDefault();
 
         if (name !== '') {
-            api.get(`/customers/name/${name}`)
+            api.get(`/customers/name/${name}`, {
+                headers: {
+                    Authorization: `Bearer ${JSON.parse(token)}`,
+                }
+            })
                 .then((response) => {
                     setCustomers(response.data.customers);
                 });
@@ -47,7 +58,11 @@ function Customers() {
             setName("");
 
         } else {
-            api.get('/customers')
+            api.get('/customers', {
+                headers: {
+                    Authorization: `Bearer ${JSON.parse(token)}`,
+                }
+            })
                 .then((response) => {
                     setCustomers(response.data.customers);
                 });
@@ -57,7 +72,11 @@ function Customers() {
     async function removeCustomer(id) {
         let msgType = 'success';
 
-        const data = await api.delete(`/customers/${id}`,)
+        const data = await api.delete(`/customers/${id}`, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 const updatedCustomers = customers.filter((customer) => customer._id !== id);
                 setCustomers(updatedCustomers);

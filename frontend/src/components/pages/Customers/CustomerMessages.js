@@ -14,6 +14,7 @@ function CustomerMessages() {
     const [schedules, setSchedules] = useState([]);
     const [filter, setFilter] = useState({ name: "" });
     const [status, setStatus] = useState("Todos");
+    const [token] = useState(localStorage.getItem('token') || '');
 
     let arrayDay = [];
     for (let i = 1; i <= 31; i++) {
@@ -25,8 +26,8 @@ function CustomerMessages() {
         arrayHour.push(i);
     }
 
-    const actualYear = new Date().getFullYear();
-    const nextYear = actualYear + 1;
+    //const actualYear = new Date().getFullYear();
+   // const nextYear = actualYear + 1;
 
     function handleChange(e) {
         setStatus(e);
@@ -38,7 +39,11 @@ function CustomerMessages() {
 
     //Filtrar por status ou nome
     useEffect(() => {
-        api.get(`/schedules/${filter.name}`)
+        api.get(`/schedules/${filter.name}`, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 setSchedules(response.data.schedules);
 
@@ -85,7 +90,8 @@ function CustomerMessages() {
                 }
 
             });
-    }, [status, filter]);
+              // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [status, filter, token]);
 
     return (
         <section>

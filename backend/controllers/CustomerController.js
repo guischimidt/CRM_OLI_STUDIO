@@ -76,6 +76,12 @@ module.exports = class CustomersController {
         res.status(200).json({ customers: customers, });
     }
 
+    static async getCount(req, res) {
+        const count = await Customer.countDocuments();
+
+        res.status(200).json({ count: count, });
+    }
+
     static async getById(req, res) {
         const id = req.params.id;
 

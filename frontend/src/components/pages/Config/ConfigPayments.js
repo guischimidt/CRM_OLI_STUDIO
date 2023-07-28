@@ -19,19 +19,28 @@ function ConfigPayments() {
     const navigate = useNavigate();
     const [payments, setPayments] = useState([]);
     const { setFlashMessage } = useFlashMessage();
+    const [token] = useState(localStorage.getItem('token') || '');
 
     useEffect(() => {
 
-        api.get('/config/payments/')
+        api.get('/config/payments/', {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 setPayments(response.data.payments);
             });
-    }, []);
+    }, [token]);
 
     async function removePayment(id) {
         let msgType = 'success';
 
-        const data = await api.delete(`/config/payments/${id}`,)
+        const data = await api.delete(`/config/payments/${id}`,{
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 const updatedPayments = payments.filter((payment) => payment._id !== id);
                 setPayments(updatedPayments);

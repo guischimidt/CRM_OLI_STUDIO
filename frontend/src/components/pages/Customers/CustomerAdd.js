@@ -3,6 +3,7 @@ import api from '../../../utils/api'
 import styles from './CustomerAdd.module.css';
 
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 //Components 
 import CustomerForm from '../../form/CustomerForm';
@@ -14,11 +15,17 @@ import useFlashMessage from '../../../hooks/useFlashMessage';
 function CustomerAdd() {
     const { setFlashMessage } = useFlashMessage();
     const navigate = useNavigate();
+    const [token] = useState(localStorage.getItem('token') || '');
+
 
     async function registerCustomer(customer) {
         let msgType = "success";
 
-        const data = await api.post('customers/create', customer,)
+        const data = await api.post('customers/create', customer, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        })
             .then((response) => {
                 return response.data;
             })

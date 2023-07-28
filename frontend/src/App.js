@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { useContext } from 'react';
 
 //Components
 import Sidebar from './components/layout/Sidebar';
@@ -8,6 +9,7 @@ import Message from './components/layout/Message';
 
 //Pages
 import Home from './components/pages/Home';
+import Login from './components/pages/Auth/Login';
 import Customers from './components/pages/Customers/Customers';
 import CustomerMessages from './components/pages/Customers/CustomerMessages';
 import CustomerAdd from './components/pages/Customers/CustomerAdd';
@@ -20,35 +22,45 @@ import ConfigProceduresAdd from './components/pages/Config/ConfigProceduresAdd';
 import ConfigProceduresEdit from './components/pages/Config/ConfigProceduresEdit';
 import Schedule from './components/pages/Schedule/Schedules';
 import ScheduleAdd from './components/pages/Schedule/ScheduleAdd';
-
 import VerifyMessages from './components/VerifyMessages';
+
+import { UserProvider, Context } from './context/UserContext'
+
+const PrivateRoute = ({ children }) => {
+  const { authenticated } = useContext(Context);
+
+  return (
+    authenticated ? (children) : (<Navigate to="/login" />)
+  )
+};
 
 function App() {
   return (
     <Router>
-      <Sidebar />
-
-      <Message />
-      <Container>
-        <Routes>
-          <Route path="/customers/messages" element={<CustomerMessages />} />
-          <Route path="/customers/add" element={<CustomerAdd />} />
-          <Route path="/customers/edit/:id" element={<CustomerEdit />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/config/payments/add" element={<ConfigPaymentsAdd />} />
-          <Route path="/config/payments/edit/:id" element={<ConfigPaymentsEdit />} />
-          <Route path="/config/payments" element={<ConfigPayments />} />
-          <Route path="/config/procedures/add" element={<ConfigProceduresAdd />} />
-          <Route path="/config/procedures/edit/:id" element={<ConfigProceduresEdit />} />
-          <Route path="/config/procedures" element={<ConfigProcedures />} />
-          <Route path="/schedule/add/:id" element={<ScheduleAdd />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/verifymessages" element={<VerifyMessages />} />
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </Container>
+      <UserProvider>
+        <Sidebar />
+        <Message />
+        <Container>
+          <Routes>
+            <Route path="/customers/messages" element={<PrivateRoute><CustomerMessages /></PrivateRoute>} />
+            <Route path="/customers/add" element={<PrivateRoute><CustomerAdd /></PrivateRoute>} />
+            <Route path="/customers/edit/:id" element={<PrivateRoute><CustomerEdit /></PrivateRoute>} />
+            <Route path="/customers" element={<PrivateRoute><Customers /></PrivateRoute>} />
+            <Route path="/config/payments/add" element={<PrivateRoute><ConfigPaymentsAdd /></PrivateRoute>} />
+            <Route path="/config/payments/edit/:id" element={<PrivateRoute><ConfigPaymentsEdit /></PrivateRoute>} />
+            <Route path="/config/payments" element={<PrivateRoute><ConfigPayments /></PrivateRoute>} />
+            <Route path="/config/procedures/add" element={<PrivateRoute><ConfigProceduresAdd /></PrivateRoute>} />
+            <Route path="/config/procedures/edit/:id" element={<PrivateRoute><ConfigProceduresEdit /></PrivateRoute>} />
+            <Route path="/config/procedures" element={<PrivateRoute><ConfigProcedures /></PrivateRoute>} />
+            <Route path="/schedule/add/:id" element={<PrivateRoute><ScheduleAdd /></PrivateRoute>} />
+            <Route path="/schedule" element={<PrivateRoute><Schedule /></PrivateRoute>} />
+            <Route path="/verifymessages" element={<VerifyMessages />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+          </Routes>
+        </Container>
+      </UserProvider>
       <Footer />
-
     </Router>
   );
 }

@@ -1,14 +1,15 @@
 const router = require('express').Router();
-
 const ScheduleController = require('../controllers/ScheduleController.js');
 
 //middlewares
+const verifyToken = require('../helpers/verify-token');
 
-router.post('/create', ScheduleController.create);
-router.patch('/:id', ScheduleController.update);
-router.get('/:name', ScheduleController.getByName);
-router.get('/status/:status', ScheduleController.getByStatus);
 router.post('/sendMessage', ScheduleController.verifyMessages);
-router.get('/', ScheduleController.getAll);
+
+router.post('/create', verifyToken, ScheduleController.create);
+router.patch('/:id', verifyToken, ScheduleController.update);
+router.get('/:name', verifyToken, ScheduleController.getByName);
+router.get('/status/:status', verifyToken, ScheduleController.getByStatus);
+router.get('/', verifyToken, ScheduleController.getAll);
 
 module.exports = router;

@@ -44,7 +44,7 @@ async function sendMessage(message, phone, id, message_type) {
 module.exports = class ScheduleController {
 
     static async getAll(req, res) {
-        const schedules = await Schedule.find().sort('-startTime');
+        const schedules = await Schedule.find().sort('-startTime').limit(50);
 
         res.status(200).json({ schedules: schedules, });
     }
@@ -156,7 +156,10 @@ module.exports = class ScheduleController {
         if (cancelStatus) {
             console.log("Entrou cancelamento");
             const auth = new google.auth.GoogleAuth({
-                keyFile: process.env.KEY_FILE,
+                credentials: {
+                    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+                    private_key: process.env.GOOGLE_PRIVATE_KEY
+                },
                 scopes: process.env.SCOPES,
             });
 
@@ -284,7 +287,10 @@ module.exports = class ScheduleController {
             };
 
             const auth = new google.auth.GoogleAuth({
-                keyFile: process.env.KEY_FILE,
+                credentials: {
+                    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+                    private_key: process.env.GOOGLE_PRIVATE_KEY
+                },
                 scopes: process.env.SCOPES,
             });
 
@@ -465,7 +471,10 @@ module.exports = class ScheduleController {
         }
 
         const auth = new google.auth.GoogleAuth({
-            keyFile: process.env.KEY_FILE,
+            credentials: {
+                client_email: process.env.GOOGLE_CLIENT_EMAIL,
+                private_key: process.env.GOOGLE_PRIVATE_KEY
+            },
             scopes: process.env.SCOPES,
         });
 
