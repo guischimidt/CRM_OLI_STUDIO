@@ -4,7 +4,7 @@ const ScheduleController = require('../controllers/ScheduleController.js');
 //middlewares
 const verifyToken = require('../helpers/verify-token');
 
-router.post('/sendMessage', ScheduleController.verifyMessages);
+router.get('/sendMessage', ScheduleController.verifyMessages);
 
 router.post('/create', verifyToken, ScheduleController.create);
 router.patch('/:id', verifyToken, ScheduleController.update);
