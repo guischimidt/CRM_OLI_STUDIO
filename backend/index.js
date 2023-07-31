@@ -2,7 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const cron = require('node-cron');
 
+require('dotenv').config();
+
 var axios = require('axios');
+
 
 //Import Routes
 const UserRoutes = require('./routes/UserRoutes');
@@ -15,13 +18,12 @@ const app = express();
 //config JSON response
 app.use(express.json());
 
-//solve cors
-app.use(cors({ credentials: true, origin: 'http://192.168.0.10:3000' }));
-
 app.use((req, res, next) => {
   res.set('access-control-allow-origin', '*')
   res.set('access-control-allow-methods', '*')
   res.set('access-control-allow-headers', '*')
+  app.use(cors({ credentials: true, origin: '*' }));
+
   next();
 });
 
@@ -35,21 +37,21 @@ app.use('/schedules', ScheduleRoutes);
 app.use('/users', UserRoutes);
 
 //Cron
-cron.schedule("0 19 * * *", () => {
-  console.log("ENTROU");
-  var config = {
-    method: 'post',
-    url: 'http://192.168.0.10:5000/schedules/sendMessage/',
-    headers: {},
-  };
+// cron.schedule("0 19 * * *", () => {
+//   console.log("ENTROU");
+//   var config = {
+//     method: 'post',
+//     url: 'http://192.168.0.10:5000/schedules/sendMessage/',
+//     headers: {},
+//   };
 
-  axios(config)
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-});
+//   axios(config)
+//     .then(function (response) {
+//       console.log(response);
+//     })
+//     .catch(function (error) {
+//       console.log(error);
+//     });
+// });
 
-app.listen(5000);
+app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
