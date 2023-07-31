@@ -511,7 +511,7 @@ function Schedules() {
                             }>
                                 <td>{schedule.name.split("(")[0]}</td>
                                 <td>{schedule.customer.name}</td>
-                                <td>{Moment(`${schedule.startTime}`).format('DD/MM/YYYY HH:mm')}</td>
+                                <td>{Moment(`${schedule.startTime}`).add(3, 'hours').format('DD/MM/YYYY HH:mm')}</td>
                                 {schedule.status === "Criado" || schedule.status === "Remarcado"
                                     ? <>
                                         <td><BsIcons.BsFillClockFill onClick={() => openModalReschedule(schedule._id)} /></td>
