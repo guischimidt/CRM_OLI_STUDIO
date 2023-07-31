@@ -5,7 +5,7 @@ const cron = require('node-cron');
 require('dotenv').config();
 
 var axios = require('axios');
-
+const port = process.env.PORT;
 
 //Import Routes
 const UserRoutes = require('./routes/UserRoutes');
