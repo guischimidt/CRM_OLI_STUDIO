@@ -18,7 +18,7 @@ async function sendMessage(message, phone, id, message_type) {
     });
     var config = {
         method: 'post',
-        url: 'http://192.168.0.10:3333/message/text?key=oli_studio',
+        url: 'https://whatsapp-olistudio.onrender.com/message/text?key=oli_studio',
         headers: {},
         data: data
     };
