@@ -72,6 +72,7 @@ function Schedules() {
 
     function handleSelect(e) {
         setSchedule({ ...schedule, [e.target.name]: e.target.options[e.target.selectedIndex].value });
+        console.log(schedule)
     };
 
     function handleSelectPayment(e) {
@@ -98,6 +99,7 @@ function Schedules() {
     function openModalReschedule(data) {
         setIsOpen(true);
         setScheduleId(data);
+        console.log(scheduleId)
         setReschedule(true);
         setModalPayment(false);
     }
@@ -151,7 +153,7 @@ function Schedules() {
                 return err.response.data;
             });
 
-        if (payment && customer._id !== "" && msgType === "success") {
+        if (payment !== "" && customer._id !== undefined && msgType === "success") {
             await api.patch(`customers/edit/${customer._id}`, customer, {
                 headers: {
                     Authorization: `Bearer ${JSON.parse(token)}`,
@@ -168,7 +170,8 @@ function Schedules() {
 
         setFlashMessage(data.message, msgType);
         setStatus("Atualizado");
-        setSchedule("");
+        setSchedule({});
+        setSchedule({ year: JSON.stringify(actualYear) });
         setPayment({});
         setScheduleId("");
         closeModal();
