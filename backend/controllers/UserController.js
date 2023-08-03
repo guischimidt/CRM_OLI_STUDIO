@@ -46,31 +46,34 @@ module.exports = class UserController {
 
 	static async sign_in(req, res) {
 		const { email, password } = req.body;
-
+	
 		const verifiedLogin = verifyLoginData(email, password);
-
+	
 		if (verifiedLogin) {
-			return res.status(422).json({ message: verifiedLogin });
+		  return res.status(422).json({ message: verifiedLogin });
 		}
-
-		const user = await User.findOneAndUpdate(
+	
+		try {
+		  const user = await User.findOneAndUpdate(
 			{ email: email },
-			{ '$set': { 'last_login': Date.now() } },
-			{ new: true });
-
-		if (!user) {
-			res.status(401).json({ message: 'Usuário e/ou senha inválidos2' });
-			return;
+			{ $set: { last_login: Date.now() } },
+			{ new: true }
+		  );
+	
+		  if (!user) {
+			return res.status(401).json({ message: 'Usuário e/ou senha inválidos' });
+		  }
+	
+		  const checkPassword = await bcrypt.compare(password, user.password);
+	
+		  if (!checkPassword) {
+			return res.status(401).json({ message: 'Usuário e/ou senha inválidos' });
+		  }
+	
+		  await createUserToken(user, req, res);
+		} catch (error) {
+		  res.status(500).json({ message: error.message });
 		}
-
-		const checkPassword = await bcrypt.compare(password, user.password);
-
-		if (!checkPassword) {
-			res.status(401).json({ mensagem: 'Usuário e/ou senha inválidos1' });
-			return;
-		}
-
-		await createUserToken(user, req, res);
-	}
+	  }
 
 };
