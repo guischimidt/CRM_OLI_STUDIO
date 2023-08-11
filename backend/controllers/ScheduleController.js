@@ -44,7 +44,7 @@ async function sendMessage(message, phone, id, message_type) {
 module.exports = class ScheduleController {
 
     static async getAll(req, res) {
-        const schedules = await Schedule.find().sort('-startTime').limit(50);
+        const schedules = await Schedule.find().sort('-startTime').limit(75);
 
         res.status(200).json({ schedules: schedules, });
     }
